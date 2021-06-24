@@ -21,7 +21,7 @@ class CreateCollectionPointService {
     });
 
     if(collectionPointExists) {
-      throw new Error("CNPJ already been using");
+      throw new Error("CNPJ already been used!");
     };
 
   const user = await createUserService.execute({
