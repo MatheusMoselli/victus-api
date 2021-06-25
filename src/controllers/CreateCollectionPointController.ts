@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { CreateCollectionPointService } from '../services/CreateCollectionPointService';
 
-class CollectionPointController {
+class CreateCollectionPointController {
   async handle(req: Request, res: Response) {
     const {
       CNPJ,
@@ -25,4 +25,4 @@ class CollectionPointController {
   }
 }
 
-export { CollectionPointController };
+export { CreateCollectionPointController };

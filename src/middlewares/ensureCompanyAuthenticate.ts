@@ -5,7 +5,7 @@ interface IPayload {
   sub: string;
 }
 
-export function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
+export function ensureCompanyAuthenticated(req: Request, res: Response, next: NextFunction) {
   const authToken = req.headers.authorization;
 
   if(!authToken) {
@@ -15,7 +15,7 @@ export function ensureAuthenticated(req: Request, res: Response, next: NextFunct
   const [, token] = authToken.split(" ");
   
   try {
-    const { sub } = verify(token, process.env.JWT_SECRET_CLIENT) as IPayload;
+    const { sub } = verify(token, process.env.JWT_SECRET_COMPANY) as IPayload;
     req.id = sub;
     return next();
   } catch (err) {
