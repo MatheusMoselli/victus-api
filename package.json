@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "engines": {
-    "node": "14.17.1"
-  },
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
     "build": "tsc",
-    "start": "node ./dist/app.js",
+    "start": "node ./dist/server.js",
     "prod": "yarn build && yarn start",
     "format": "prettier-standard '*/.ts'"
   },
