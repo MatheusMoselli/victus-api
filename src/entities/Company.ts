@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { User } from './User';
@@ -11,6 +12,7 @@ export class Company {
   @Column()
   CNPJ: string;
   
+  @Exclude()
   @Column()
   user_id: string;
 
