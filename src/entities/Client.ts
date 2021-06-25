@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { User } from './User';
+import { Exclude } from 'class-transformer';
 
 
 @Entity("clients")
@@ -20,8 +21,15 @@ export class Client {
   @Column()
   points: number;
 
+  @Exclude()
   @Column()
   user_id: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @JoinColumn({ name: "user_id" })
   @OneToOne(() => User)
