@@ -3,10 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": "14.17.1"
+  },
   "scripts": {
-    "start": "tsc && node dist/server.js",
     "dev": "ts-node-dev src/server.ts",
-    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
+    "start": "node dist/server.js",
+    "postinstall": "tsc",
+    "watch-node": "nodemon dist/server.js",
+    "watch-ts": "tsc -w",
+    "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
