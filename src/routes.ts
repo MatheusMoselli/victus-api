@@ -18,6 +18,9 @@ const listCompaniesController = new ListCompaniesController();
 const listCollectionPointsController = new ListCollectionPointsController();
 const clientAuthenticateController = new ClientAuthenticateController();
 
+router.get("/", (req, res) => {
+  res.send("home");
+})
 router.get("/clients", ensureAuthenticated, getClientController.handle);
 router.post("/clients/create", createClientController.handle);
 router.post("/clients/login", clientAuthenticateController.handle);
