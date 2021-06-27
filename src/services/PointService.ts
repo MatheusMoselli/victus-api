@@ -77,7 +77,14 @@ class PointService {
     .catch(err => {
       throw new Error(`User with CPF ${user_cpf} not found`);
     });
+    const point = await pointModel.findById(id)
+    .catch(err => {
+      throw new Error(`Collection Point not found`);
+    })
+
     const points = this.convertPoundsToPoints(pounds);
+    point.received_pounds += pounds;
+    point.given_points += points;
     user.points += points;
 
     const transaction = pointTransactionModel({
@@ -87,6 +94,10 @@ class PointService {
     });
 
     await userModel.findOneAndUpdate({ CPF: user.CPF }, { points: user.points }, { new: true });
+    await pointModel.findOneAndUpdate({ _id: id }, { 
+      received_pounds: point.received_pounds,
+      given_points: point.given_points
+    }, { new: true });
     
     transaction.save()
     .catch(err => { throw new Error("An error has occurred, please try again later") });

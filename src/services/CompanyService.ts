@@ -79,6 +79,14 @@ class CompanyService {
   }
 
   async createEvent({ name, address, date, necessary_points, creator, type}: ICreateEventRequest) {
+    const id = creator;
+    const company = await companyModel.findById(id)
+    .catch(err => {
+      throw new Error("Company not found");
+    });
+
+    company.many_events += 1;
+    
     const event = eventModel({
       name,
       address,
@@ -87,6 +95,8 @@ class CompanyService {
       creator,
       type
     });
+
+    await companyModel.findByIdAndUpdate(id, { many_events: company.many_events }, { new: true });    
 
     event.save();
     return event;
