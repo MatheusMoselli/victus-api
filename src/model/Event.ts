@@ -45,6 +45,10 @@ const eventSchema = Schema({
   creator: { 
     type: Schema.ObjectId, 
     ref: "Company" 
+  },
+  type: {
+    type: Schema.ObjectId,
+    ref: "Type"
   }
 })
 

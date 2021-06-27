@@ -1,10 +1,11 @@
 import eventModel from "../model/Event";
-
-
-
+import typeModel from "../model/TypeEvent";
 class EventService {
   async listByCreator(creator: string) {
-    const events = await eventModel.find( { creator } ).catch(err => {
+    const events = await eventModel.find( { creator } )
+    .populate('creator')
+    .exec()
+    .catch(err => {
       throw new Error("this company doesn't exists");
     });
 
@@ -21,6 +22,35 @@ class EventService {
     });
 
     return events;
+  };
+
+  async listByType(type_name: string) {
+    const { id } = await typeModel.findOne({ name: type_name });
+
+    const events = await eventModel.find({ type: id })
+    .populate("type")
+    .exec()
+    .catch(err => {
+      throw new Error("this event type doesn't exists");
+    });
+
+    if (!events.length) {
+      throw new Error(`there is no event with type ${type_name}`);
+    };
+
+    return events;
+  };
+
+  async createTypes(name: string) {
+    const nameExists = await typeModel.findOne({ name });
+    if(nameExists) {
+      throw new Error("Type already exists");
+    }
+
+    const type = typeModel({ name });
+    type.save();
+    
+    return type;
   };
 };
 

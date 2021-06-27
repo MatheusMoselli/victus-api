@@ -1,6 +1,9 @@
 import { compare, hash } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import pointModel from "../model/Point";
+import pointTransactionModel from "../model/PointsTransaction";
+import userModel from "../model/User";
+import userService from "./UserService";
 
 interface ICollectionCreateRequest {
   name: string;
@@ -67,6 +70,44 @@ class PointService {
     }
 
     return point;
+  }
+
+  async transaction( pounds:number, user_cpf: string, id: string) {
+    const user = await userModel.findOne({ CPF: user_cpf })
+    .catch(err => {
+      throw new Error(`User with CPF ${user_cpf} not found`);
+    });
+    const points = this.convertPoundsToPoints(pounds);
+    user.points += points;
+
+    const transaction = pointTransactionModel({
+      points,
+      user_receiver: user.id,
+      point_sender: id
+    });
+
+    await userModel.findOneAndUpdate({ CPF: user.CPF }, { points: user.points }, { new: true });
+    
+    transaction.save()
+    .catch(err => { throw new Error("An error has occurred, please try again later") });
+
+    return transaction;
+  }
+
+  async update(id: string, name: string, address: {}, profile_picture: string) {
+    const filter = { _id: id };
+    const update = { name, address, profile_picture };
+
+    const point = await pointModel.findOneAndUpdate(filter, update, { new: true })
+    .catch(err => {
+      throw new Error(err.message);
+    });
+
+    return point;
+  }
+
+  convertPoundsToPoints(pounds: number) {
+    return pounds * 500;
   }
 };
 

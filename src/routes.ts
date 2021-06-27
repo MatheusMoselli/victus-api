@@ -22,10 +22,15 @@ router.post("/company/login", companyController.authenticate);
 router.post("/company/events/create", ensureAuthenticated.company, companyController.createEvent);
 
 router.get("/events/:creator_id", eventController.listByCreator);
+router.get("/events/type/:event_type", eventController.listByType);
 router.get("/events", eventController.listAll);
 
 router.get("/point", ensureAuthenticated.point, pointController.get);
+router.post("/point/transaction", ensureAuthenticated.point, pointController.transaction);
+router.put("/point/edit", ensureAuthenticated.point, pointController.update);
 router.post("/point/create", pointController.create);
 router.post("/point/login", pointController.authenticate);
+
+router.post("/event-types", eventController.createTypes);
 
 export { router };

@@ -43,12 +43,13 @@ class CompanyController {
       name,
       address,
       necessary_points,
-      date
+      date,
+      type
     } = req.body;
 
     const creator = req.id;
 
-    const event = await companyService.createEvent({ name, address, necessary_points, date, creator });
+    const event = await companyService.createEvent({ name, address, necessary_points, date, creator, type });
 
     return res.json(event);
   }

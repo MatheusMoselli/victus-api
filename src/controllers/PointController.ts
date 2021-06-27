@@ -43,6 +43,33 @@ class PointController {
 
     return res.json(collectionPoint);
   }
+
+  async transaction(req: Request, res: Response) {
+    const {
+      pounds,
+      user_cpf,
+    } = req.body;
+
+    const id = req.id;
+
+    const transaction = await pointService.transaction( pounds, user_cpf, id );
+
+    return res.json(transaction);
+  }
+
+  async update(req: Request, res: Response) {
+    const {
+      name,
+      address,
+      profile_picture
+    } = req.body;
+
+    const id = req.id;
+
+    const point = await pointService.update(id, name, address, profile_picture);
+
+    return res.json(point);
+  };
 };
 
 export default new PointController();

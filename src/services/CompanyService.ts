@@ -16,6 +16,7 @@ interface ICreateEventRequest {
   necessary_points: number;
   date: Date;
   creator: string;
+  type: string;
 }
 
 
@@ -77,13 +78,14 @@ class CompanyService {
     return company;
   }
 
-  async createEvent({ name, address, date, necessary_points, creator}: ICreateEventRequest) {
+  async createEvent({ name, address, date, necessary_points, creator, type}: ICreateEventRequest) {
     const event = eventModel({
       name,
       address,
       date,
       necessary_points,
-      creator
+      creator,
+      type
     });
 
     event.save();
