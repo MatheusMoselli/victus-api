@@ -43,10 +43,10 @@ const eventSchema = Schema({
     required: true
   },
   creator: { 
-    type: Schema.Type.ObjectId, 
+    type: Schema.ObjectId, 
     ref: "Company" 
   }
 })
 
-const eventModal = mongoose.model("Event", eventSchema);
-export default eventModal;
+const eventModel = mongoose.model("Event", eventSchema);
+export default eventModel;

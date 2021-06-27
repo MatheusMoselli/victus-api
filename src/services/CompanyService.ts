@@ -1,17 +1,26 @@
 import { compare, hash } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import companyModel from '../model/Company';
+import eventModel from '../model/Event';
 
-interface ICompanyCreateRequest {
+interface ICreateCompanyRequest {
   CNPJ: string;
   name: string;
   email: string;
   password: string;
 }
 
+interface ICreateEventRequest {
+  name: string;
+  address: {};
+  necessary_points: number;
+  date: Date;
+  creator: string;
+}
+
 
 class CompanyService {
-  async create({ CNPJ, name, email, password }: ICompanyCreateRequest) {
+  async create({ CNPJ, name, email, password }: ICreateCompanyRequest) {
     const emailExists = await companyModel.findOne({ email });
     if (emailExists) {
       throw new Error("Email already been used!");
@@ -66,6 +75,19 @@ class CompanyService {
     }
 
     return company;
+  }
+
+  async createEvent({ name, address, date, necessary_points, creator}: ICreateEventRequest) {
+    const event = eventModel({
+      name,
+      address,
+      date,
+      necessary_points,
+      creator
+    });
+
+    event.save();
+    return event;
   }
 };
 

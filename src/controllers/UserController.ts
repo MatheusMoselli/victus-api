@@ -43,6 +43,18 @@ class UserController {
 
     return res.json(token);
   }
+
+  async update(req: Request, res: Response) {
+    const {
+      name,
+      birthday
+    } = req.body;
+
+    const id = req.id;
+
+    const user = await userService.update({ name, birthday, id });
+    return res.json(user);
+  };
 };
 
 export default new UserController();

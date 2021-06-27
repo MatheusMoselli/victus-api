@@ -37,6 +37,21 @@ class CompanyController {
 
     return res.json(company);
   }
+
+  async createEvent(req: Request, res: Response) {
+    const {
+      name,
+      address,
+      necessary_points,
+      date
+    } = req.body;
+
+    const creator = req.id;
+
+    const event = await companyService.createEvent({ name, address, necessary_points, date, creator });
+
+    return res.json(event);
+  }
 };
 
 export default new CompanyController();

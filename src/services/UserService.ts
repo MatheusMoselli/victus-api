@@ -12,6 +12,11 @@ interface IUserCreateRequest {
   points?: number;
 }
 
+interface IUserUpdateRequest {
+  id: string;
+  name: string;
+  birthday: Date;
+};
 class UserService {
   async create({ email, password, name, CPF, birthday, premium, points}: IUserCreateRequest) {
     const userEmailExists = await userModel.findOne({ email });
@@ -72,6 +77,18 @@ class UserService {
     })
 
     return token;
+  }
+
+  async update({ id, name, birthday }: IUserUpdateRequest) {
+    const filter = { _id: id };
+    const update = { name, birthday };
+
+    const user = await userModel.findOneAndUpdate(filter, update ,{ new: true })
+    .catch(err => {
+      throw new Error(err.message);
+    });
+
+    return user;
   }
 };
 
