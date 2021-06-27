@@ -1,44 +1,45 @@
 import { Router } from "express";
-import { CreateClientController } from "./controllers/CreateClientController";
-import { CreateCompanyController } from "./controllers/CreateCompanyController";
-import { CreateCollectionPointController } from "./controllers/CreateCollectionPointController";
 
-import { GetClientController } from "./controllers/GetClientController";
-import { GetCompanyController } from "./controllers/GetCompanyController";
-import { GetCollectionPointController } from "./controllers/GetCollectionPointsController";
-
-import { ClientAuthenticateController } from "./controllers/ClientAuthenticateController";
-import { CompanyAuthenticateController } from "./controllers/CompanyAuthenticateController";
-import { CollectionPointAuthenticateController } from "./controllers/CollectionPointAuthenticateController";
-
-import { ensureClientAuthenticated } from "./middlewares/ensureClientAuthenticated";
+// Validations
+import { ensureUserAuthenticated } from "./middlewares/ensureUserAuthenticated";
 import { ensureCompanyAuthenticated } from "./middlewares/ensureCompanyAuthenticate";
 import { ensureCollectionPointAuthenticated } from "./middlewares/ensureCollectionPointAuthenticated";
 
+// Controllers
+import { UserCreateController } from "./controllers/UserCreateController";
+import { UserAuthenticateController } from "./controllers/UserAuthenticateController";
+import { UserGetController } from "./controllers/UserGetController";
+const userCreateController = new UserCreateController();
+const userAuthenticateController = new UserAuthenticateController();
+const userGetController = new UserGetController();
+
+import { CompanyCreateController } from "./controllers/CompanyCreateController";
+import { CompanyAuthenticateController } from "./controllers/CompanyAuthenticateController";
+import { CompanyGetController } from "./controllers/CompanyGetController";
+const companyCreateController = new CompanyCreateController();
+const companyAuthenticateController = new CompanyAuthenticateController();
+const companyGetController = new CompanyGetController();
+
+import { CollectionPointCreateController } from "./controllers/CollectionPointCreateController";
+import { CollectionPointAuthenticateController } from "./controllers/CollectionPointAuthenticateController";
+import { CollectionPointGetController } from "./controllers/CollectionPointsGetController";
+const collectionPointCreateController = new CollectionPointCreateController();
+const collectionPointAuthenticateController = new CollectionPointAuthenticateController();
+const collectionPointGetController = new CollectionPointGetController();
+
 const router = Router();
 
-const createClientController = new CreateClientController();
-const createCompanyController = new CreateCompanyController();
-const createCollectionPointController = new CreateCollectionPointController();
+// Routes
+router.get("/user", ensureUserAuthenticated, userGetController.handle);
+router.post("/user/create", userCreateController.handle);
+router.post("/user/login", userAuthenticateController.handle);
 
-const getClientController = new GetClientController();
-const getCompanyController = new GetCompanyController();
-const getCollectionPointController = new GetCollectionPointController();
+router.get("/company", ensureCompanyAuthenticated, companyGetController.handle);
+router.post("/company/create", companyCreateController.handle);
+router.post("/company/login", companyAuthenticateController.handle);
 
-const clientAuthenticateController = new ClientAuthenticateController();
-const companyAuthenticateController = new CompanyAuthenticateController();
-const collectionPointAuthenticateController = new CollectionPointAuthenticateController();
-
-router.get("/clients", ensureClientAuthenticated, getClientController.handle);
-router.post("/clients/create", createClientController.handle);
-router.post("/clients/login", clientAuthenticateController.handle);
-
-router.get("/companies", ensureCompanyAuthenticated, getCompanyController.handle);
-router.post("/companies/create", createCompanyController.handle);
-router.post("/companies/login", companyAuthenticateController.handle);
-
-router.get("/points", ensureCollectionPointAuthenticated, getCollectionPointController.handle);
-router.post("/points/create", createCollectionPointController.handle);
-router.post("/points/login", collectionPointAuthenticateController.handle);
+router.get("/point", ensureCollectionPointAuthenticated, collectionPointGetController.handle);
+router.post("/point/create", collectionPointCreateController.handle);
+router.post("/point/login", collectionPointAuthenticateController.handle);
 
 export { router };

@@ -1,9 +1,6 @@
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
-import { getCustomRepository } from 'typeorm';
-import { CollectionPointRepository } from '../repositories/CollectionPointRepository';
-import { UserRepository } from '../repositories/UserRepository';
-
+import pointModel from '../model/Point';
 interface ICollectionPointRequest {
   email: string;
   password: string;
@@ -11,30 +8,22 @@ interface ICollectionPointRequest {
 
 class CollectionPointAuthenticateService {
   async execute({ email, password }: ICollectionPointRequest) {
-    const userRepository = getCustomRepository(UserRepository);
-    const collectionPointRepository = getCustomRepository(CollectionPointRepository);
-    const user = await userRepository.findOne({
-      email
-    });
+    const point = await pointModel.findOne({ email });
 
-    if(!user) {
+    if(!point) {
       throw new Error("Email/Password incorrect!");
     };
 
-    const passwordMatch = await compare(password, user.password);
+    const passwordMatch = await compare(password, point.password);
 
     if(!passwordMatch) {
       throw new Error("Email/Password incorrect!");
     }
 
-    const collectionPoint = await collectionPointRepository.findOne({
-      user_id: user.id
-    });
-
     const token = sign({
-      email: user.email
+      email: point.email
     }, process.env.JWT_SECRET_POINT, {
-      subject: collectionPoint.id,
+      subject: point.id,
       expiresIn: "1d"
     })
 

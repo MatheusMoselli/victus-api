@@ -1,8 +1,6 @@
-import { getCustomRepository } from "typeorm";
-import { UserRepository } from "../repositories/UserRepository";
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
-import { CompanyRepository } from "../repositories/CompanyRepository";
+import companyModel from "../model/Company";
 
 interface ICompanyRequest {
   email: string;
@@ -11,28 +9,22 @@ interface ICompanyRequest {
 
 class CompanyAuthenticateService {
   async execute({email, password}: ICompanyRequest) {
-    const userRepository = getCustomRepository(UserRepository);
-    const companyRepository = getCustomRepository(CompanyRepository);
-    const user = await userRepository.findOne({
+    const company = await companyModel.findOne({
       email
     });
 
-    if(!user) {
+    if(!company) {
       throw new Error("Email/Password incorrect!");
     };
     
-    const passwordMatch = await compare(password, user.password);
+    const passwordMatch = await compare(password, company.password);
     
     if (!passwordMatch) {
       throw new Error("Email/Password incorrect!");
     }
 
-    const company = await companyRepository.findOne({
-      user_id: user.id
-    });
-
     const token = sign({
-      email: user.email
+      email: company.email
     }, process.env.JWT_SECRET_COMPANY, {
       subject: company.id,
       expiresIn: "1d"

@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import { GetCollectionPointService } from "../services/GetCollectionPointService";
+import { CollectionPointGetService } from "../services/CollectionPointGetService";
 
-class GetCollectionPointController {
+class CollectionPointGetController {
   async handle(req: Request, res: Response) {
     const id = req.id;
     
-    const getCollectionPointService = new GetCollectionPointService();
+    const getCollectionPointService = new CollectionPointGetService();
     const collectionPoint = await getCollectionPointService.execute(id);
 
     return res.json(collectionPoint);
   }
 };
 
-export { GetCollectionPointController };
+export { CollectionPointGetController };
