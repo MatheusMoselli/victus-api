@@ -1,11 +1,10 @@
 require('dotenv').config();
 import "express-async-errors";
+import "./database";
 import express, { NextFunction, Request, Response } from "express";
 import { router } from "./routes";
-import dbConnection from "./database";
 import cors from "cors";
 
-const db = new dbConnection(); 
 const app = express();
 app.use(cors());
 app.use(express.json());
