@@ -3,8 +3,6 @@ import { sign } from "jsonwebtoken";
 import pointModel from "../model/Point";
 import pointTransactionModel from "../model/PointsTransaction";
 import userModel from "../model/User";
-import userService from "./UserService";
-
 interface ICollectionCreateRequest {
   name: string;
   email: string;
@@ -28,7 +26,7 @@ class PointService {
     }
 
     const passwordHash = await hash(password, 8);
-    const point = pointModel({
+    const point = new pointModel({
       name,
       email,
       password: passwordHash,
@@ -64,7 +62,7 @@ class PointService {
   }
 
   async get(id: string) {
-    const point = pointModel.findById(id);
+    const point = await pointModel.findById(id);
     if (!point) {
       throw new Error("Collection Point not found!");
     }
@@ -87,14 +85,14 @@ class PointService {
     point.given_points += points;
     user.points += points;
 
-    const transaction = pointTransactionModel({
+    const transaction = new pointTransactionModel({
       points,
       user_receiver: user.id,
       point_sender: id
     });
 
     await userModel.findOneAndUpdate({ CPF: user.CPF }, { points: user.points }, { new: true });
-    await pointModel.findOneAndUpdate({ _id: id }, { 
+    await pointModel.findByIdAndUpdate(id, { 
       received_pounds: point.received_pounds,
       given_points: point.given_points
     }, { new: true });
@@ -106,10 +104,9 @@ class PointService {
   }
 
   async update(id: string, name: string, address: {}, profile_picture: string) {
-    const filter = { _id: id };
     const update = { name, address, profile_picture };
 
-    const point = await pointModel.findOneAndUpdate(filter, update, { new: true })
+    const point = await pointModel.findByIdAndUpdate(id, update, { new: true })
     .catch(err => {
       throw new Error(err.message);
     });

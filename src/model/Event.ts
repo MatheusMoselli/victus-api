@@ -1,7 +1,17 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const ObjId = mongoose.SchemaTypes.ObjectId;
 
-const eventSchema = Schema({
+interface IEvent {
+  name: string;
+  address: {};
+  profile_picture?: string;
+  necessary_points: number;
+  date: Date;
+  creator: string;
+  type: string;
+};
+
+const eventSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -43,14 +53,13 @@ const eventSchema = Schema({
     required: true
   },
   creator: { 
-    type: Schema.ObjectId, 
+    type: ObjId, 
     ref: "Company" 
   },
   type: {
-    type: Schema.ObjectId,
+    type: ObjId,
     ref: "Type"
   }
 })
 
-const eventModel = mongoose.model("Event", eventSchema);
-export default eventModel;
+export default mongoose.model<IEvent>("Event", eventSchema);;

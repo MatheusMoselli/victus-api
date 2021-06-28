@@ -55,6 +55,29 @@ class UserController {
     const user = await userService.update({ name, birthday, id });
     return res.json(user);
   };
+
+  async delete(req: Request, res: Response) {
+    const id = req.id;
+
+    await userService.delete(id);
+    res.json({ message: "User deleted successfully" })
+  }
+
+  async buyTicket(req: Request, res: Response) {
+    const { event_id } = req.body;
+    const user_id = req.id;
+
+    const ticket = await userService.buyTicket(event_id, user_id);
+
+    return res.json(ticket);
+  };
+
+  async myEvents(req: Request, res: Response) {
+    const id = req.id;
+    const tickets = await userService.myEvents(id);
+
+    return res.json(tickets);
+  }
 };
 
 export default new UserController();

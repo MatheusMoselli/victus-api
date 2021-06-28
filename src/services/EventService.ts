@@ -25,9 +25,16 @@ class EventService {
   };
 
   async listByType(type_name: string) {
-    const { id } = await typeModel.findOne({ name: type_name });
+    const type = await typeModel.findOne({ name: type_name })
+    .catch(err => {
+      throw new Error("internal server error");
+    });
 
-    const events = await eventModel.find({ type: id })
+    if (!type) {
+      throw new Error(`there is no type named ${type_name}`);
+    }
+
+    const events = await eventModel.find({ type: type.id })
     .populate("type")
     .exec()
     .catch(err => {
@@ -47,7 +54,7 @@ class EventService {
       throw new Error("Type already exists");
     }
 
-    const type = typeModel({ name });
+    const type = new typeModel({ name });
     type.save();
     
     return type;

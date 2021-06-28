@@ -33,7 +33,7 @@ class CompanyService {
     }
 
     const passwordHash = await hash(password, 10);
-    const company = companyModel({
+    const company = new companyModel({
       email, 
       password: passwordHash,
       name,
@@ -87,7 +87,7 @@ class CompanyService {
 
     company.many_events += 1;
     
-    const event = eventModel({
+    const event = new eventModel({
       name,
       address,
       date,
@@ -100,6 +100,19 @@ class CompanyService {
 
     event.save();
     return event;
+  }
+
+  async myEvents(id: string) {
+    const events = await eventModel.find({ creator: id })
+    .catch(err => {
+      throw new Error("Internal server error");
+    });
+
+    if (!events.length) {
+      throw new Error("you don't have created any event yet");
+    };
+
+    return events;
   }
 };
 

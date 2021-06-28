@@ -1,7 +1,15 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
 
-const companySchema = Schema({
+interface ICompany {
+  name: string;
+  email: string;
+  password: string;
+  profile_picture?: string;
+  CNPJ: string;
+  many_events?: number;
+}
+
+const companySchema = new mongoose.Schema<ICompany>({
   name: {
     type: String,
     required: true
@@ -27,5 +35,5 @@ const companySchema = Schema({
   }
 });
 
-const companyModel = mongoose.model("Company", companySchema);
-export default companyModel;
+
+export default mongoose.model<ICompany>("Company", companySchema);
