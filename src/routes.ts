@@ -19,8 +19,10 @@ router.post("/user/create", userController.create);
 router.post("/user/login", userController.authenticate);
 
 router.get("/company", ensureAuthenticated.company, companyController.get);
+router.put("/company/edit", ensureAuthenticated.company, companyController.update)
 router.get("/company/my_events", ensureAuthenticated.company, companyController.myEvents);
 router.post("/company/create", companyController.create);
+router.delete("/company/delete", ensureAuthenticated.company, companyController.delete)
 router.post("/company/login", companyController.authenticate);
 router.post("/company/events/create", ensureAuthenticated.company, companyController.createEvent);
 

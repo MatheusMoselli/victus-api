@@ -60,6 +60,25 @@ class CompanyController {
 
     return res.json(events);
   }
+
+  async update(req: Request, res: Response) {
+    const {
+      name
+    } = req.body;
+
+    const id = req.id;
+
+    const company = await companyService.update({ name, id });
+    return res.json(company);
+  }
+
+  async delete(req: Request, res: Response){
+
+    const id= req.id;
+    await companyService.delete(id);
+    res.json({ message: "Company deleted successfully" })
+  }
+
 };
 
 export default new CompanyController();

@@ -19,6 +19,10 @@ interface ICreateEventRequest {
   type: string;
 }
 
+interface ICompanyUpdateRequest {
+  id: string;
+  name: string;
+}
 
 class CompanyService {
   async create({ CNPJ, name, email, password }: ICreateCompanyRequest) {
@@ -94,6 +98,7 @@ class CompanyService {
       necessary_points,
       creator,
       type
+
     });
 
     await companyModel.findByIdAndUpdate(id, { many_events: company.many_events }, { new: true });    
@@ -113,6 +118,25 @@ class CompanyService {
     };
 
     return events;
+  } 
+
+  async update({ id, name}: ICompanyUpdateRequest) {
+    const update = { name};
+
+    const company = await companyModel.findByIdAndUpdate(id, update, { new: true })
+    .catch(err => {
+      throw new Error(err.message);
+    });
+
+    return company;
+  }
+  
+  async delete(id:string){
+    
+    await companyModel.findByIdAndDelete(id)
+    .catch(err => {
+      throw new Error("Wasn't possible to delete this company, please try again later");
+    })
   }
 };
 
