@@ -1,7 +1,14 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const ObjId = mongoose.SchemaTypes.ObjectId;
 
-const pointTransactionSchema = Schema({
+interface ITransaction {
+  points: number;
+  created_at?: Date;
+  user_receiver: string;
+  point_sender: string;
+}
+
+const pointTransactionSchema = new mongoose.Schema({
   points: {
     type: Number,
     required: true 
@@ -11,14 +18,15 @@ const pointTransactionSchema = Schema({
     default: Date.now
   },
   user_receiver: {
-    type: Schema.ObjectId,
+    type: ObjId,
+    ref: "User",
     required: true
   },
   point_sender: {
-    type: Schema.ObjectId,
+    type: ObjId,
+    ref: "Point",
     required: true
   }
 });
 
-const pointTransactionModel = mongoose.model("Point Transaction", pointTransactionSchema);
-export default pointTransactionModel;
+export default mongoose.model<ITransaction>("Point Transaction", pointTransactionSchema);

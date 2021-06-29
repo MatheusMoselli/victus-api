@@ -1,12 +1,14 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
 
-const typeSchema = Schema({
+interface IType {
+  name: string;
+};
+
+const typeSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
   }
 })
 
-const typeModel = mongoose.model("Type", typeSchema);
-export default typeModel;
+export default mongoose.model<IType>("Type", typeSchema);

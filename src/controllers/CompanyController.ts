@@ -53,6 +53,13 @@ class CompanyController {
 
     return res.json(event);
   }
+
+  async myEvents(req: Request, res: Response) {
+    const id = req.id;
+    const events = await companyService.myEvents(id);
+
+    return res.json(events);
+  }
 };
 
 export default new CompanyController();

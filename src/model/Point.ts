@@ -1,7 +1,17 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
 
-const pointSchema = Schema({
+interface IPoint {
+  name: string;
+  email: string;
+  password: string;
+  address: {};
+  profile_picture?: string;
+  CNPJ: string;
+  received_pounds?: number;
+  given_points?: number;
+};
+
+const pointSchema = new  mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -56,6 +66,4 @@ const pointSchema = Schema({
   }
 })
 
-const pointModel = mongoose.model("Point", pointSchema);
-
-export default pointModel;
+export default mongoose.model<IPoint>("Point", pointSchema);;
