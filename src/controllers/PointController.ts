@@ -70,6 +70,20 @@ class PointController {
 
     return res.json(point);
   };
+
+  async recent(req: Request, res: Response) {
+    const id = req.id;
+    const top_recent = await pointService.recent(id);
+    
+    return res.json(top_recent);
+  };
+
+  async allTransactions(req: Request, res: Response) {
+    const id = req.id;
+    const transactions = await pointService.allTransactions(id);
+
+    return res.json(transactions);
+  }
 };
 
 export default new PointController();

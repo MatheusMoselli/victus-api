@@ -33,12 +33,15 @@ router.get("/events/type/:event_type", eventController.listByType);
 router.get("/events", eventController.listAll);
 
 router.get("/point", ensureAuthenticated.point, pointController.get);
+router.get("/point/recent", ensureAuthenticated.point, pointController.recent);
 router.post("/point/transaction", ensureAuthenticated.point, pointController.transaction);
 router.put("/point/edit", ensureAuthenticated.point, pointController.update);
 router.post("/point/create", pointController.create);
 router.post("/point/login", pointController.authenticate);
+router.get("/transactions", ensureAuthenticated.point, pointController.allTransactions);
 
 router.post("/event-types", eventController.createTypes);
+
 
 
 export { router };

@@ -114,6 +114,24 @@ class PointService {
     return point;
   }
 
+  async recent(id: string) {
+    const top_recent = await pointTransactionModel.find({ point_sender: id }).limit(3);
+    if (!top_recent.length) {
+      throw new Error("you don't have any transactions yet");
+    }
+
+    return top_recent;
+  };
+
+  async allTransactions(id: string) {
+    const transactions = await pointTransactionModel.find({ point_sender: id });
+    if(!transactions.length) {
+      throw new Error("you don't have any transactions yet");
+    }
+
+    return transactions;
+  }
+
   convertPoundsToPoints(pounds: number) {
     return pounds * 500;
   }
