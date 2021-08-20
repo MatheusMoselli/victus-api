@@ -126,7 +126,9 @@ class PointService {
   };
 
   async allTransactions(id: string) {
-    const transactions = await pointTransactionModel.find({ point_sender: id });
+    const transactions = await pointTransactionModel.find({ point_sender: id })
+    .populate("user_receiver");
+
     if(!transactions.length) {
       throw new Error("you don't have any transactions yet");
     }
