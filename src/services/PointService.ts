@@ -115,7 +115,9 @@ class PointService {
   }
 
   async recent(id: string) {
-    const top_recent = await pointTransactionModel.find({ point_sender: id }).limit(3);
+    const top_recent = await pointTransactionModel.find({ point_sender: id })
+      .limit(3)
+      .populate("user_receiver");
     if (!top_recent.length) {
       throw new Error("you don't have any transactions yet");
     }
