@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import eventService from "../services/EventService";
 
-
-
 class EventController {
   async listByCreator(req: Request, res: Response) {
     const creator = req.params.creator_id;
@@ -14,8 +12,8 @@ class EventController {
   async listAll(req: Request, res: Response) {
     const events = await eventService.listAll();
     return res.json(events);
-  };
-  
+  }
+
   async listByType(req: Request, res: Response) {
     const type_name = req.params.event_type;
     const events = await eventService.listByType(type_name);
@@ -27,8 +25,12 @@ class EventController {
     const { name } = req.body;
     const type = await eventService.createTypes(name);
     return res.json(type);
-  };
+  }
 
-};
+  async getAllTypes(req: Request, res: Response) {
+    const types = await eventService.getAllTypes();
+    return res.json(types);
+  }
+}
 
 export default new EventController();
