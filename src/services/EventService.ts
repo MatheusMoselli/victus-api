@@ -1,5 +1,7 @@
 import eventModel from "../model/Event";
 import typeModel from "../model/TypeEvent";
+import ticketModel from "../model/EventTicket";
+
 class EventService {
   async listByCreator(creator: string) {
     const events = await eventModel
@@ -67,6 +69,37 @@ class EventService {
       throw new Error("There aren't any types");
     }
     return types;
+  }
+
+  async topEvents() {
+    const events = await ticketModel.aggregate([
+      {
+        $group: {
+          _id: "$event_receiver",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+      {
+        $lookup: {
+          from: "events",
+          localField: "_id",
+          foreignField: "_id",
+          as: "event",
+        },
+      },
+      {
+        $limit: 5,
+      },
+    ]);
+
+    return events;
   }
 }
 

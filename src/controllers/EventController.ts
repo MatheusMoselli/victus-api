@@ -31,6 +31,11 @@ class EventController {
     const types = await eventService.getAllTypes();
     return res.json(types);
   }
+
+  async topEvents(req: Request, res: Response) {
+    const events = await eventService.topEvents();
+    return res.json(events);
+  }
 }
 
 export default new EventController();

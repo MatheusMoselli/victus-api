@@ -51,6 +51,7 @@ router.post(
   ensureAuthenticated.user,
   userController.buyTicket
 );
+router.get("/events/top_events", eventController.topEvents);
 router.get("/events/:creator_id", eventController.listByCreator);
 router.get("/events/type/:event_type", eventController.listByType);
 
