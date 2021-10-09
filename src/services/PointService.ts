@@ -135,6 +135,7 @@ class PointService {
   async recent(id: string) {
     const top_recent = await pointTransactionModel
       .find({ point_sender: id })
+      .sort({ _id: -1 })
       .limit(3)
       .populate("user_receiver");
     if (!top_recent.length) {
