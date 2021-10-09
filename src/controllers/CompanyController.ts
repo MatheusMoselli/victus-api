@@ -3,28 +3,20 @@ import companyService from "../services/CompanyService";
 
 class CompanyController {
   async create(req: Request, res: Response) {
-    const {
-      CNPJ,
-      name,
-      email,
-      password
-    } = req.body;
+    const { CNPJ, name, email, password } = req.body;
 
     const company = await companyService.create({
       CNPJ,
       name,
       email,
-      password
+      password,
     });
 
     return res.json(company);
   }
 
   async authenticate(req: Request, res: Response) {
-    const {
-      email,
-      password
-    } = req.body;
+    const { email, password } = req.body;
 
     const company = await companyService.authenticate(email, password);
 
@@ -39,17 +31,19 @@ class CompanyController {
   }
 
   async createEvent(req: Request, res: Response) {
-    const {
-      name,
-      address,
-      necessary_points,
-      date,
-      type
-    } = req.body;
+    const { name, address, necessary_points, details, date, type } = req.body;
 
     const creator = req.id;
 
-    const event = await companyService.createEvent({ name, address, necessary_points, date, creator, type });
+    const event = await companyService.createEvent({
+      name,
+      address,
+      necessary_points,
+      details,
+      date,
+      creator,
+      type,
+    });
 
     return res.json(event);
   }
@@ -62,9 +56,7 @@ class CompanyController {
   }
 
   async update(req: Request, res: Response) {
-    const {
-      name
-    } = req.body;
+    const { name } = req.body;
 
     const id = req.id;
 
@@ -72,13 +64,11 @@ class CompanyController {
     return res.json(company);
   }
 
-  async delete(req: Request, res: Response){
-
-    const id= req.id;
+  async delete(req: Request, res: Response) {
+    const id = req.id;
     await companyService.delete(id);
-    res.json({ message: "Company deleted successfully" })
+    res.json({ message: "Company deleted successfully" });
   }
-
-};
+}
 
 export default new CompanyController();

@@ -53,7 +53,7 @@ router.post(
 );
 router.get("/events/top_events", eventController.topEvents);
 router.get("/events/type/:event_type", eventController.listByType);
-router.get("/test/:id", eventController.eventById);
+router.get("/event/:id", eventController.eventById);
 router.get("/events/:creator_id", eventController.listByCreator);
 
 router.get("/events", eventController.listAll);

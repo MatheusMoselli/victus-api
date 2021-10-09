@@ -9,57 +9,61 @@ interface IEvent {
   date: Date;
   creator: string;
   type: string;
-};
+}
 
 const eventSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   address: {
     type: {
       patio: {
         type: String,
-        required: true
+        required: true,
       },
       CEP: {
         type: String,
-        required: true 
+        required: true,
       },
       neighborhood: {
         type: String,
-        required: true 
+        required: true,
       },
       city: {
         type: String,
-        required: true
+        required: true,
       },
       state: {
         type: String,
-        required: true 
-      }
+        required: true,
+      },
     },
-    required: true
+    required: true,
   },
   profile_picture: {
     type: String,
   },
+  details: {
+    type: String,
+    required: true,
+  },
   necessary_points: {
     type: Number,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    required: true
+    required: true,
   },
-  creator: { 
-    type: ObjId, 
-    ref: "Company" 
+  creator: {
+    type: ObjId,
+    ref: "Company",
   },
   type: {
     type: ObjId,
-    ref: "Type"
-  }
-})
+    ref: "Type",
+  },
+});
 
-export default mongoose.model<IEvent>("Event", eventSchema);;
+export default mongoose.model<IEvent>("Event", eventSchema);

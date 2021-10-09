@@ -103,9 +103,13 @@ class EventService {
   }
 
   async getEventById(id: string) {
-    const event = await eventModel.findById(id).catch((err) => {
-      throw new Error("Algo deu errado! Tente novamente mais tarde!");
-    });
+    const event = await eventModel
+      .findById(id)
+      .populate("creator")
+      .populate("type")
+      .catch((err) => {
+        throw new Error("Algo deu errado! Tente novamente mais tarde!");
+      });
     if (!event) {
       throw new Error("Evento não encontrado!!");
     }

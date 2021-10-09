@@ -14,6 +14,7 @@ interface ICreateEventRequest {
   name: string;
   address: {};
   necessary_points: number;
+  details: string;
   date: Date;
   creator: string;
   type: string;
@@ -91,6 +92,7 @@ class CompanyService {
     address,
     date,
     necessary_points,
+    details,
     creator,
     type,
   }: ICreateEventRequest) {
@@ -106,6 +108,7 @@ class CompanyService {
       address,
       date,
       necessary_points,
+      details,
       creator,
       type,
     });
