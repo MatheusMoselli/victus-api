@@ -69,13 +69,13 @@ class UserService {
     });
 
     if (!user) {
-      throw new Error("Email/Password incorretos!");
+      throw new Error("Email/Senha incorretos!");
     }
 
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new Error("Email/Password incorretos!");
+      throw new Error("Email/Senha incorretos!");
     }
 
     const token = sign(

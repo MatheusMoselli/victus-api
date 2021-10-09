@@ -55,13 +55,13 @@ class CompanyService {
     });
 
     if (!company) {
-      throw new Error("Email/Password incorretos!");
+      throw new Error("Email/Senha incorretos!");
     }
 
     const passwordMatch = await compare(password, company.password);
 
     if (!passwordMatch) {
-      throw new Error("Email/Password incorretos!");
+      throw new Error("Email/Senha incorretos!");
     }
 
     const token = sign(

@@ -48,13 +48,13 @@ class PointService {
     const point = await pointModel.findOne({ email });
 
     if (!point) {
-      throw new Error("Email/Password incorretos!");
+      throw new Error("Email/Senha incorretos!");
     }
 
     const passwordMatch = await compare(password, point.password);
 
     if (!passwordMatch) {
-      throw new Error("Email/Password incorretos!");
+      throw new Error("Email/Senha incorretos!");
     }
 
     const token = sign(
