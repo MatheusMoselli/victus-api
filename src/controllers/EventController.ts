@@ -36,6 +36,12 @@ class EventController {
     const events = await eventService.topEvents();
     return res.json(events);
   }
+
+  async eventById(req: Request, res: Response) {
+    const id = req.params.id;
+    const event = await eventService.getEventById(id);
+    return res.json(event);
+  }
 }
 
 export default new EventController();

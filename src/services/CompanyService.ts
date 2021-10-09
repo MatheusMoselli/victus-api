@@ -1,7 +1,7 @@
-import { compare, hash } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
-import companyModel from '../model/Company';
-import eventModel from '../model/Event';
+import { compare, hash } from "bcryptjs";
+import { sign } from "jsonwebtoken";
+import companyModel from "../model/Company";
+import eventModel from "../model/Event";
 
 interface ICreateCompanyRequest {
   CNPJ: string;
@@ -28,20 +28,20 @@ class CompanyService {
   async create({ CNPJ, name, email, password }: ICreateCompanyRequest) {
     const emailExists = await companyModel.findOne({ email });
     if (emailExists) {
-      throw new Error("Email already been used!");
+      throw new Error("Este email já está sendo utilizado!");
     }
 
     const CNPJExists = await companyModel.findOne({ CNPJ });
     if (CNPJExists) {
-      throw new Error("CNPJ already been used!")
+      throw new Error("Este CNPJ já está sendo utilizado!");
     }
 
     const passwordHash = await hash(password, 10);
     const company = new companyModel({
-      email, 
+      email,
       password: passwordHash,
       name,
-      CNPJ
+      CNPJ,
     });
 
     company.save();
@@ -50,25 +50,29 @@ class CompanyService {
 
   async authenticate(email: string, password: string) {
     const company = await companyModel.findOne({
-      email
+      email,
     });
 
-    if(!company) {
-      throw new Error("Email/Password incorrect!");
-    };
-    
-    const passwordMatch = await compare(password, company.password);
-    
-    if (!passwordMatch) {
-      throw new Error("Email/Password incorrect!");
+    if (!company) {
+      throw new Error("Email/Password incorretos!");
     }
 
-    const token = sign({
-      email: company.email
-    }, process.env.JWT_SECRET_COMPANY, {
-      subject: company.id,
-      expiresIn: "1d"
-    });
+    const passwordMatch = await compare(password, company.password);
+
+    if (!passwordMatch) {
+      throw new Error("Email/Password incorretos!");
+    }
+
+    const token = sign(
+      {
+        email: company.email,
+      },
+      process.env.JWT_SECRET_COMPANY,
+      {
+        subject: company.id,
+        expiresIn: "1d",
+      }
+    );
 
     return token;
   }
@@ -76,68 +80,77 @@ class CompanyService {
   async get(id: string) {
     const company = companyModel.findById(id);
     if (!company) {
-      throw new Error("Company not found");
+      throw new Error("Empresa não encontrada");
     }
 
     return company;
   }
 
-  async createEvent({ name, address, date, necessary_points, creator, type}: ICreateEventRequest) {
+  async createEvent({
+    name,
+    address,
+    date,
+    necessary_points,
+    creator,
+    type,
+  }: ICreateEventRequest) {
     const id = creator;
-    const company = await companyModel.findById(id)
-    .catch(err => {
-      throw new Error("Company not found");
+    const company = await companyModel.findById(id).catch((err) => {
+      throw new Error("Empresa não encontrada");
     });
 
     company.many_events += 1;
-    
+
     const event = new eventModel({
       name,
       address,
       date,
       necessary_points,
       creator,
-      type
-
+      type,
     });
 
-    await companyModel.findByIdAndUpdate(id, { many_events: company.many_events }, { new: true });    
+    await companyModel.findByIdAndUpdate(
+      id,
+      { many_events: company.many_events },
+      { new: true }
+    );
 
     event.save();
     return event;
   }
 
   async myEvents(id: string) {
-    const events = await eventModel.find({ creator: id })
-    .catch(err => {
-      throw new Error("Internal server error");
+    const events = await eventModel.find({ creator: id }).catch((err) => {
+      throw new Error("Algo deu errado! Tente novamente mais tarde!");
     });
 
     if (!events.length) {
-      throw new Error("you don't have created any event yet");
-    };
+      throw new Error("Você ainda não criou nenhum evento!");
+    }
 
     return events;
-  } 
+  }
 
-  async update({ id, name}: ICompanyUpdateRequest) {
-    const update = { name};
+  async update({ id, name }: ICompanyUpdateRequest) {
+    const update = { name };
 
-    const company = await companyModel.findByIdAndUpdate(id, update, { new: true })
-    .catch(err => {
-      throw new Error(err.message);
-    });
+    const company = await companyModel
+      .findByIdAndUpdate(id, update, { new: true })
+      .catch((err) => {
+        throw new Error(err.message);
+      });
 
     return company;
   }
-  
-  async delete(id:string){
-    
-    await companyModel.findByIdAndDelete(id)
-    .catch(err => {
-      throw new Error("Wasn't possible to delete this company, please try again later");
-    })
+
+  async delete(id: string) {
+    await companyModel.findByIdAndDelete(id).catch((err) => {
+      throw new Error(
+        "Não foi possível deletar essa empresa, por favor tente novamente mais tarde"
+      );
+    });
   }
-};
+}
 
 export default new CompanyService();

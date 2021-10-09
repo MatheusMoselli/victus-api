@@ -9,11 +9,11 @@ class EventService {
       .populate("creator")
       .exec()
       .catch((err) => {
-        throw new Error("this company doesn't exists");
+        throw new Error("Empresa não encontrada");
       });
 
     if (!events.length) {
-      throw new Error("this company doesn't have events yet");
+      throw new Error("Empresa não possui nenhum evento cadastrado");
     }
 
     return events;
@@ -21,7 +21,7 @@ class EventService {
 
   async listAll() {
     const events = await eventModel.find().catch((err) => {
-      throw new Error("Server internal error");
+      throw new Error("Algo deu errado! Tente novamente mais tarde!");
     });
 
     return events;
@@ -29,11 +29,11 @@ class EventService {
 
   async listByType(type_name: string) {
     const type = await typeModel.findOne({ name: type_name }).catch((err) => {
-      throw new Error("internal server error");
+      throw new Error("Algo deu errado! Tente novamente mais tarde!");
     });
 
     if (!type) {
-      throw new Error(`there is no type named ${type_name}`);
+      throw new Error(`Não há nenhum tipo com o nome de ${type_name}`);
     }
 
     const events = await eventModel
@@ -41,11 +41,11 @@ class EventService {
       .populate("type")
       .exec()
       .catch((err) => {
-        throw new Error("this event type doesn't exists");
+        throw new Error("Este tipo de evento não existe");
       });
 
     if (!events.length) {
-      throw new Error(`there is no event with type ${type_name}`);
+      throw new Error(`Não há nenhum evento do tipo: ${type_name}`);
     }
 
     return events;
@@ -54,7 +54,7 @@ class EventService {
   async createTypes(name: string) {
     const nameExists = await typeModel.findOne({ name });
     if (nameExists) {
-      throw new Error("Type already exists");
+      throw new Error("Este tipo de evento já existe");
     }
 
     const type = new typeModel({ name });
@@ -66,7 +66,7 @@ class EventService {
   async getAllTypes() {
     const types = await typeModel.find();
     if (!types) {
-      throw new Error("There aren't any types");
+      throw new Error("Não há nenhum tipo de evento cadastrado");
     }
     return types;
   }
@@ -100,6 +100,16 @@ class EventService {
     ]);
 
     return events;
+  }
+
+  async getEventById(id: string) {
+    const event = await eventModel.findById(id).catch((err) => {
+      throw new Error("Algo deu errado! Tente novamente mais tarde!");
+    });
+    if (!event) {
+      throw new Error("Evento não encontrado!!");
+    }
+    return event;
   }
 }
 
