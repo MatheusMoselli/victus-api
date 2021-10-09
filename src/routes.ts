@@ -45,6 +45,11 @@ router.post(
   ensureAuthenticated.company,
   companyController.createEvent
 );
+router.put(
+  "/company/events/edit/:event_id",
+  ensureAuthenticated.company,
+  companyController.editEvent
+);
 
 router.post(
   "/events/ticket",

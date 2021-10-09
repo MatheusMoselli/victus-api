@@ -20,6 +20,15 @@ interface ICreateEventRequest {
   type: string;
 }
 
+interface IEditEventRequest {
+  event_id: string;
+  name: string;
+  address: {};
+  necessary_points: number;
+  details: string;
+  date: Date;
+}
+
 interface ICompanyUpdateRequest {
   id: string;
   name: string;
@@ -120,6 +129,25 @@ class CompanyService {
     );
 
     event.save();
+    return event;
+  }
+
+  async editEvent({
+    event_id,
+    name,
+    address,
+    date,
+    necessary_points,
+    details,
+  }: IEditEventRequest) {
+    const id = event_id;
+    const update = { name, address, date, necessary_points, details };
+    const event = await eventModel
+      .findByIdAndUpdate(id, update, { new: true })
+      .catch((err) => {
+        throw new Error(err.message);
+      });
+
     return event;
   }
 

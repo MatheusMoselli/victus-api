@@ -48,6 +48,22 @@ class CompanyController {
     return res.json(event);
   }
 
+  async editEvent(req: Request, res: Response) {
+    const { name, address, necessary_points, details, date } = req.body;
+    const event_id = req.params.event_id;
+
+    const event = await companyService.editEvent({
+      event_id,
+      name,
+      address,
+      necessary_points,
+      details,
+      date,
+    });
+
+    return res.json(event);
+  }
+
   async myEvents(req: Request, res: Response) {
     const id = req.id;
     const events = await companyService.myEvents(id);
