@@ -136,6 +136,9 @@ class UserService {
     });
 
     ticket.save();
+    await eventModel.findByIdAndUpdate(event_id, {
+      many_participants: event.many_participants + 1,
+    });
     await userModel.findByIdAndUpdate(user.id, { points: user.points });
 
     return ticket;
@@ -154,6 +157,33 @@ class UserService {
     }
 
     return tickets;
+  }
+
+  async saveEvent(id: string, event_id: string) {
+    const user = await userModel.findById(id);
+    const ticketExists = await ticketModel.findOne({
+      event_receiver: event_id,
+      user_sender: id,
+    });
+    if (ticketExists) {
+      throw new Error("Você já possui um ingresso para esse evento");
+    }
+
+    const new_saved_events = [...user.saved_events, event_id];
+    const updatedUser = await userModel.findByIdAndUpdate(
+      user.id,
+      { points: user.points, saved_events: new_saved_events },
+      { new: true }
+    );
+
+    return updatedUser;
+  }
+
+  async getAllSavedEvents(id: string) {
+    const { saved_events } = await userModel
+      .findById(id)
+      .populate("saved_events");
+    return saved_events;
   }
 }
 

@@ -19,6 +19,16 @@ router.get(
 );
 router.put("/user/edit", ensureAuthenticated.user, userController.update);
 router.delete("/user/delete", ensureAuthenticated.user, userController.delete);
+router.post(
+  "/user/save-event",
+  ensureAuthenticated.user,
+  userController.saveEvent
+);
+router.get(
+  "/user/save-event",
+  ensureAuthenticated.user,
+  userController.getAllSavedEvents
+);
 router.post("/user/create", userController.create);
 router.post("/user/login", userController.authenticate);
 

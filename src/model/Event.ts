@@ -5,6 +5,8 @@ interface IEvent {
   name: string;
   address: {};
   profile_picture?: string;
+  many_participants: number;
+  details: string;
   necessary_points: number;
   date: Date;
   creator: string;
@@ -47,6 +49,10 @@ const eventSchema = new mongoose.Schema({
   details: {
     type: String,
     required: true,
+  },
+  many_participants: {
+    type: Number,
+    default: 0,
   },
   necessary_points: {
     type: Number,
